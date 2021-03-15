@@ -9,6 +9,7 @@ import SearchInput from './components/SearchInput';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    // state = { -- Class properties
     this.state = {
       // repersents when a call is still being made (in order to show a loading icon)
       loading: false,

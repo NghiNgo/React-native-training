@@ -3,6 +3,16 @@ import { StyleSheet, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import PropTypes from 'prop-types';
 export default class SearchInput extends Component {
+  // Class properties
+  // static propTypes = {
+  //   onSubmit: PropTypes.func.isRequired,
+  //   placeholder: PropTypes.string,
+  // };
+
+  // static defaultProps = {
+  //   placeholder: '',
+  // };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -57,6 +67,7 @@ export default class SearchInput extends Component {
   }
 }
 
+// PropTypes
 SearchInput.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
@@ -65,6 +76,8 @@ SearchInput.propTypes = {
 SearchInput.defaultProps = {
   placeholder: '',
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
