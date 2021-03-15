@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-  lagerText: {
+  largeText: {
     fontSize: 44,
   },
   smallText: {
