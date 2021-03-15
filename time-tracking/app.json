@@ -1,0 +1,12 @@
+{
+  "name": "time-tracking",
+  "displayName": "time-tracking",
+  "expo": {
+    "name": "time-tracking",
+    "slug": "time-tracking",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
