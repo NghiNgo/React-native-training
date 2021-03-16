@@ -13,6 +13,10 @@ import TimerForm from './TimerForm';
 // }
 
 export default class ToggleableTimerFrom extends React.Component {
+  static propTypes = {
+    onFormSubmit: this.propTypes.func.isRequired,
+  };
+
   state = {
     isOpen: false,
   };
@@ -21,13 +25,27 @@ export default class ToggleableTimerFrom extends React.Component {
     this.setState({ isOpen: true });
   };
 
+  handleFormClose = () => {
+    this.setState({ isOpen: false });
+  };
+
+  handleFromSubmit = timer => {
+    const { onFormSubmit } = this.props;
+
+    onFormSubmit(timer);
+    this.setState({ isOpen: false });
+  };
+
   render() {
     const { isOpen } = this.state;
 
     return (
       <View style={[styles.container, !isOpen && styles.buttonPadding]}>
         {isOpen ? (
-          <TimerForm />
+          <TimerForm
+            onFormSubmit={this.props.onFormSubmit}
+            onFormClose={this.handleFormClose}
+          />
         ) : (
           <TimerButton title="+" color="black" onPress={this.hadleFormOpen} />
           /* When the TimerButton is pressed, the function handleFormOpen() will be invoked. handleFromOpen() modifies the state,

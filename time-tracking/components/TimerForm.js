@@ -12,6 +12,20 @@ import TimerButton from './TimerButton';
 //   condition ? expression1 : expression2 */
 
 export default class TimerForm extends React.Component {
+  static propTypes = {
+    id: PropTypes.string,
+    title: PropTypes.string,
+    project: PropTypes.string,
+    onFormSubmit: PropTypes.func.isRequired,
+    onFormClose: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    id: null,
+    title: '',
+    project: '',
+  };
+
   constructor(props) {
     super(props);
 
@@ -31,10 +45,22 @@ export default class TimerForm extends React.Component {
     this.setState({ project });
   }
 
+  handleSubmit = () => {
+    const { onFormSubmit, id } = this.props;
+    const { title, project } = this.state;
+
+    onFormSubmit({
+      id,
+      title,
+      project,
+    });
+  };
+
   render() {
     const { id } = this.props;
     const { title, project } = this.state;
     const submitText = id ? 'Update' : 'Create';
+    const { id, onFormClose } = this.props;
 
     return (
       <View style={styles.formContainer}>
@@ -66,8 +92,18 @@ export default class TimerForm extends React.Component {
           </View>
         </View>
         <View style={styles.buttonGroup}>
-          <TimerButton small color='#21BA45' title={submitText} />
-          <TimerButton small color='#DB2828' title="Cancel" />
+          <TimerButton
+            small
+            color='#21BA45'
+            title={submitText}
+            onPress={this.handleSubmit}
+          />
+          <TimerButton
+            small
+            color='#DB2828'
+            title="Cancel"
+            onPress={onFormClose}
+          />
         </View>
       </View>
     )
@@ -78,6 +114,13 @@ export default class TimerForm extends React.Component {
     - whether or not the create form is open.
   */
 }
+/* An example of lifecycle of TimerForm:
+  1. On the page is a timer with the title "Mow the lawn".
+  2. The user toggles open the edit form for this timer, mounting TimerForm to the screen.
+  3. TimerForm initializes the state property title to the string "Mow the lawn".
+  4. The user modifies the title input field, changing it to the value "Cut the grass".
+  5. With every keystroke, React invokes handleTitleChange. The internal state of title is kept in-sync with
+  what the user sees on the page. */
 
 const styles = StyleSheet.create({
   formContainer: {
