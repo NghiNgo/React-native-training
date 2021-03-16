@@ -1,9 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacityComponent, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 export default function TimerButton({ color, title, small, onPress }) {
   return (
-    <TouchableOpacityComponent
+    <TouchableOpacity
       style={[styles.button, { borderColor: color }]}
       onPress={onPress}
     >
@@ -16,7 +16,7 @@ export default function TimerButton({ color, title, small, onPress }) {
       >
         {title}
       </Text>
-    </TouchableOpacityComponent>
+    </TouchableOpacity>
   );
 }
 

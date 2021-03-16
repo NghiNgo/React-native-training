@@ -3,32 +3,58 @@ import React from 'react'
 import TimerForm from './TimerForm';
 import Timer from './Timer';
 
-export default function EditableTimer({
-  // Think of functional components as components that only need to implement the render() method.
-  // They don't manage state and don't need any of React's special lifecycle hooks.
-  // The props are passed in as the first argument to the function. We don't use this when working
-  // with functional components. Here, we use destructuring to extract all the props from the props object.
-  id,
-  title,
-  project,
-  elapsed,
-  isRunning,
-  editFormOpen,
-}) {
-  if (editFormOpen) {
-    return <TimerForm id={id} title={title} project={project} />;
-  }
-  return (
-    <Timer
-      id={id}
-      title={title}
-      project={project}
-      elapsed={elapsed}
-      isRunning={isRunning}
-    />
-  );
-}
+// export default function EditableTimer({
+//   // Think of functional components as components that only need to implement the render() method.
+//   // They don't manage state and don't need any of React's special lifecycle hooks.
+//   // The props are passed in as the first argument to the function. We don't use this when working
+//   // with functional components. Here, we use destructuring to extract all the props from the props object.
+//   id,
+//   title,
+//   project,
+//   elapsed,
+//   isRunning,
+//   editFormOpen,
+// }) {
+//   if (editFormOpen) {
+//     // editFormOpen for a given timer. Stateful. The data is defined here. It changes over time. And it cannot be computed
+//     // from other state or props.
+//     return <TimerForm id={id} title={title} project={project} />;
+//   }
+//   return (
+//     <Timer
+//       id={id}
+//       title={title}
+//       project={project}
+//       elapsed={elapsed}
+//       isRunning={isRunning}
+//     />
+//   );
+// }
 
+export default class EditableTimer extends React.Component {
+  state = {
+    editFormOpen: false,
+  };
+
+  render() {
+    const { id, title, project, elapsed, isRunning } = this.props;
+    const { editFormOpen } = this.state;
+
+    if (editFormOpen) {
+      return <TimerForm id={id} title={title} project={project} />
+    }
+
+    return (
+      <Timer
+        id={id}
+        title={title}
+        project={project}
+        elapsed={elapsed}
+        isRunning={isRunning}
+      />
+    );
+  }
+}
 /* Two main reasons to use function components
 - First, using functional components where possible encourages developers to manage state in fewer locations.
 This makes our programs easier to reason about.
