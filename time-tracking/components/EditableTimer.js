@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import TimerForm from './TimerForm';
 import Timer from './Timer';
@@ -69,34 +70,6 @@ export default class EditableTimer extends React.Component {
 
   openForm = () => {
     this.setState({ editFormOpen: true });
-  };
-
-  handleFormSubmit = attrs => {
-    const { timers } = this.state;
-
-    this.setState({
-      timers: timers.map(timer => {
-        if (timer.id === attrs.id) {
-          const { title, project } = attrs;
-
-          return {
-            ...timer,
-            title,
-            project,
-          };
-        }
-
-        return timer;
-      }),
-    });
-  };
-
-  handleRemovePress = timerId => {
-    this.setState({
-      timers: this.state.timers.filter(t => t.id !== timerId),
-      // Array filter() accepts a function that is used to "test" each element in the array. It returns a new array containing
-      // all the elements that "passed" the test. If the function returns true, the element is kept.
-    });
   };
 
   render() {

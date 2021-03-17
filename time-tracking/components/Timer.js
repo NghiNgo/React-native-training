@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import PropTypes from 'prop-types'
 
 import { millisecondsToHuman } from "../utils/TimerUtils";
 import TimerButton from './TimerButton';

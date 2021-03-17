@@ -32,7 +32,7 @@ export default class App extends Component {
   };
 
   handleCreateFormSubmit = timer => {
-    const { timer } = this.state;
+    const { timers } = this.state;
 
     this.setState({
       timer: [newTimer(timer), ...timer],
@@ -61,6 +61,32 @@ export default class App extends Component {
   componentWillUnmount() {
     clearInterval(this.intervalId);
   }
+
+  handleFormSubmit = attrs => {
+    const { timers } = this.state;
+
+    this.setState({
+      timers: timers.map(timer => {
+        if (timer.id === attrs.id) {
+          const {title, project} = attrs;
+
+          return {
+            ...timer,
+            title,
+            project,
+          };
+        }
+
+        return timer;
+      }),
+    });
+  };
+
+  handleRemovePress = timerId => {
+    this.setState({
+      timers: this.state.timers.filter(t => t.id !== timerId),
+    });
+  };
 
   toggleTimer = timerId => {
     this.setState(prevState => {
@@ -91,7 +117,6 @@ export default class App extends Component {
           <Text style={styles.title}>Timers</Text>
         </View>
         <KeyboardAvoidingView
-          behavior="padding"
           style={styles.timerListContainer}
         >
           <ScrollView style={styles.timerList}>

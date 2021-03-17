@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler';
+import PropTypes from 'prop-types'
 
 import TimerButton from './TimerButton';
 
@@ -57,10 +58,11 @@ export default class TimerForm extends React.Component {
   };
 
   render() {
-    const { id } = this.props;
-    const { title, project } = this.state;
-    const submitText = id ? 'Update' : 'Create';
     const { id, onFormClose } = this.props;
+    const { title, project } = this.state;
+
+    const submitText = id ? 'Update' : 'Create';
+
 
     return (
       <View style={styles.formContainer}>
