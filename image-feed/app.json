@@ -1,0 +1,12 @@
+{
+  "name": "image-feed",
+  "displayName": "image-feed",
+  "expo": {
+    "name": "image-feed",
+    "slug": "image-feed",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
