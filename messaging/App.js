@@ -97,22 +97,22 @@ export default class App extends React.Component {
     );
   }
 
-  componentWillMount() {
-    this.subscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      const { fullscreenImageId } = this.state;
+  // componentWillMount() {
+  //   this.subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+  //     const { fullscreenImageId } = this.state;
 
-      if (fullscreenImageId) {
-        this.dismissFullscreenImage();
-        return true;
-      }
+  //     if (fullscreenImageId) {
+  //       this.dismissFullscreenImage();
+  //       return true;
+  //     }
 
-      return false;
-    });
-  }
+  //     return false;
+  //   });
+  // }
 
-  componentWillUnmount() {
-    this.subscription.remove();
-  }
+  // componentWillUnmount() {
+  //   this.subscription.remove();
+  // }
 
   render() {
     return (
