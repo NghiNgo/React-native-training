@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   container: {
     height: 40,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rbga(0,0,0,0.1)',
+    borderBottomColor: 'rgba(0,0,0,0.1)',
     alignItems: 'center',
     justifyContent: 'center',
   },
