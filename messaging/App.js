@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Alert, TouchableHighlight, Image } from 'react-native'
+import { View, StyleSheet, Alert, TouchableHighlight, Image, BackHandler } from 'react-native'
 
 import Status from './components/Status'
 import MessageList from './components/MessageList'
@@ -95,6 +95,23 @@ export default class App extends React.Component {
         <Image style={styles.fullscreenImage} source={{ uri }} />
       </TouchableHighlight>
     );
+  }
+
+  componentWillMount() {
+    this.subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      const { fullscreenImageId } = this.state;
+
+      if (fullscreenImageId) {
+        this.dismissFullscreenImage();
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  componentWillUnmount() {
+    this.subscription.remove();
   }
 
   render() {
