@@ -5,8 +5,11 @@ import AsyncStorage from '@react-native-community/async-storage'
 import Comments from './screens/Comments';
 import Feed from './screens/Feed';
 
+// Define an arbitrary key for persisting our comments object as JSON
 const ASYNC_STORAGE_COMMENTS_KEY = 'ASYNC_STORAGE_COMMENTS_KEY';
-
+/* Since we can only store string values using AsyncStorage, if we want to store a complex object, we'll
+have to serialize it to JSON first. To do this, we can call JSON.stringify before storing values and JSON.parse
+after retreiving them. */
 export default class App extends React.Component {
   state = {
     commentsForItem: {},
