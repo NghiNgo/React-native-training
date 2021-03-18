@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Alert } from 'react-native'
+import { View, StyleSheet, Alert, TouchableHighlight, Image } from 'react-native'
 
 import Status from './components/Status'
 import MessageList from './components/MessageList'
@@ -15,6 +15,11 @@ export default class App extends React.Component {
         longitude: -122.4324,
       }),
     ],
+    fullscreenImageId: null,
+  };
+
+  dismissFullscreenImage = () => {
+    this.setState({ fullscreenImageId: null});
   };
 
   handlePressMessage = ({ id, type }) => {
@@ -44,6 +49,9 @@ export default class App extends React.Component {
         confusing error messages. It's also possible to get into a corrupted state, where you'll have to
         restart the app before Alert.alert will function properly again. */
         break;
+      case 'image':
+        this.setState({ fullscreenImageId: id });
+        break;
       default:
         break;
     }
@@ -71,6 +79,24 @@ export default class App extends React.Component {
     );
   }
 
+  renderFullscreenImage = () => {
+    const { messages, fullscreenImageId } = this.state;
+
+    if (!fullscreenImageId) return null;
+
+    const image = messages.find(message => message.id === fullscreenImageId);
+
+    if (!image) return null;
+
+    const { uri } = image;
+
+    return (
+      <TouchableHighlight style={styles.fullscreenOverlay} onPress={this.dismissFullscreenImage}>
+        <Image style={styles.fullscreenImage} source={{ uri }} />
+      </TouchableHighlight>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -78,6 +104,7 @@ export default class App extends React.Component {
         {this.renderMessageList()}
         {this.renderToolbar()}
         {this.renderInputMethodEditor()}
+        {this.renderFullscreenImage()}
       </View>
     );
   }
@@ -101,5 +128,17 @@ const styles = StyleSheet.create({
     borderTopColor: 'rgba(0,0,0,0.04)',
     backgroundColor: 'white',
   },
+  fullscreenOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'black',
+    zIndex: 2,
+  },
+  fullscreenImage: {
+    flex: 1,
+    resizeMode: 'contain',
+  },
+  /* We'll use the built-in StyleSheet.absoluteFillObject so that our overlay background is fullscreen,
+  and then we'll add zIndex: 2 so that it renders on top of rest of our UI. Our image should fill the
+  overlay, so we use flex: 1. */
 });
 
