@@ -22,10 +22,24 @@ export default class App extends React.Component {
 
   handlePressToolbarCamera = () => {
 
-  }
+  };
 
   handlePressToolbarLocation = () => {
+    const { messages } = this.state;
 
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { coords: { latitide, longitude } } = position;
+
+      this.setState({
+        messages: [
+          createLocationMessage({
+            latitide,
+            longitude,
+          }),
+          ...messages,
+        ],
+      });
+    });
   }
 
   handleChangeFocus = (isFocused) => {
