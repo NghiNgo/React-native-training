@@ -105,6 +105,7 @@ export default class App extends React.Component {
     );
   }
 
+  // use to add a new image to the message list
   handlePressImage = (uri) => {
     const { messages } = this.state;
 
