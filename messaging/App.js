@@ -4,6 +4,7 @@ import { View, StyleSheet, Alert, TouchableHighlight, Image, BackHandler } from 
 import Status from './components/Status'
 import MessageList from './components/MessageList'
 import { createImageMessage, createLocationMessage, createTextMessage } from './utils/MessageUtils'
+import Toolbar from './components/Toolbar'
 export default class App extends React.Component {
   state = {
     messages: [
@@ -16,6 +17,27 @@ export default class App extends React.Component {
       }),
     ],
     fullscreenImageId: null,
+    isInputFocused: false,
+  };
+
+  handlePressToolbarCamera = () => {
+
+  }
+
+  handlePressToolbarLocation = () => {
+
+  }
+
+  handleChangeFocus = (isFocused) => {
+    this.setState({ isInputFocused: isFocused });
+  }
+
+  handleSubmit = (text) => {
+    const { messages } = this.state;
+
+    this.setState({
+      messages: [createTextMessage(text), ...messages],
+    });
   };
 
   dismissFullscreenImage = () => {
@@ -50,7 +72,7 @@ export default class App extends React.Component {
         restart the app before Alert.alert will function properly again. */
         break;
       case 'image':
-        this.setState({ fullscreenImageId: id });
+        this.setState({ fullscreenImageId: id, isInputFocused: false });
         break;
       default:
         break;
@@ -74,8 +96,18 @@ export default class App extends React.Component {
   }
 
   renderToolbar() {
+    const { isInputFocused } = this.state;
+
     return (
-      <View style={styles.toolbar}></View>
+      <View style={styles.toolbar}>
+        <Toolbar
+          isFocused={isInputFocused}
+          onSubmit={this.handleSubmit}
+          onChangeFocus={this.handleChangeFocus}
+          onPressCamera={this.handlePressToolbarCamera}
+          onPressLocation={this.handlePressToolbarLocation}
+        />
+      </View>
     );
   }
 

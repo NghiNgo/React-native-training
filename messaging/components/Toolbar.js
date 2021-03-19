@@ -47,8 +47,36 @@ export default class Toolbar extends React.Component {
     this.setState({ text: '' });
   };
 
+  setInputRef = (ref) => {
+    this.input = ref;
+  };
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.isFocused !==  this.props.isFocused) {
+      if (nextProps.isFocused) {
+        this.input.focus();
+      } else {
+        this.input.blur();
+      }
+    }
+  }
+
+  handleFocus = () => {
+    const { onChangeFocus } = this.props;
+
+    onChangeFocus(true);
+  };
+
+  handleBlur = () => {
+    const { onChangeFocus } = this.props;
+
+    onChangeFocus(false);
+  };
+
   render() {
     const { onPressCamera, onPressLocation } = this.props;
+
+    // Grab this from state!
     const { text } = this.state;
 
     return (
@@ -62,10 +90,21 @@ export default class Toolbar extends React.Component {
             underlineColorAndroid={'transparent'}
             placeholder={'Type something!'}
             blurOnSubmit={false}
+            /* We use blurOnSubmit={false} so that the keyboard isn't dismissed when the user presses the return
+            key. This is common in messaging apps, since it allows sending multiple messages in a row more easily. */
             value={text}
             onChangeText={this.handleChangeText}
             onSubmitEditing={this.handleSubmitEditing}
-            // ...
+
+            // Additional props!
+            ref={this.setInputRef}
+            onFocus={this.handleFocus}
+            /* onFocus will be called when the user taps within the input field, and the onBlur
+            prop will be called when the user taps outside the input field. We use handleFocus and
+            handleBlur to notify the parent of changes to the focus state. */
+            /* Whenever the parent passes a different value for the isFocused prop, we update the focus state of the
+            TextInput by calling this.input.focus() or this.input.blur() in componentWillReceiveProps. */
+            onBlur={this.handleBlur}
           />
         </View>
         {/*  */}
