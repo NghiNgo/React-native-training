@@ -23,6 +23,8 @@ export default class Grid extends React.Component {
   };
 
   renderGridItem = (info) => {
+    const { index } = info;
+
     const { renderItem, numColumns, itemMargin } = this.props;
 
     const { width } = Dimensions.get('window');
@@ -32,10 +34,6 @@ export default class Grid extends React.Component {
     dimensions, we should use PixelRatio to help us align to the nearest physical pixel -
     otherwise, there may be visual inconsistencies (e.g. some elements or margins appear
     larger than others). */
-
-    const { numColumns, itemMargin } = this.props;
-
-    const { width } = Dimensions.get('window');
 
     const size = PixelRatio.roundToNearestPixel(
       (width - itemMargin / (numColumns - 1)) / numColumns,
@@ -53,6 +51,8 @@ export default class Grid extends React.Component {
     /* We augment the info passed by FlatList with size, marginLeft and marginTop, so that we can
     render items at the correct size from within the renderItem function. */
   };
+  /* We created a Grid component which accepts a renderItem
+  function prop, the we passed a different function, renderGridItem, into the FlatList. */
 
   render() {
     return <FlatList {...this.props} renderItem={this.renderGridItem} />;

@@ -5,6 +5,8 @@ import Status from './components/Status'
 import MessageList from './components/MessageList'
 import { createImageMessage, createLocationMessage, createTextMessage } from './utils/MessageUtils'
 import Toolbar from './components/Toolbar'
+import ImageGrid from './components/ImageGrid';
+
 export default class App extends React.Component {
   state = {
     messages: [
@@ -105,7 +107,9 @@ export default class App extends React.Component {
 
   renderInputMethodEditor() {
     return (
-      <View style={styles.inputMethodEditor}></View>
+      <View style={styles.inputMethodEditor}>
+        <ImageGrid />
+      </View>
     );
   }
 
