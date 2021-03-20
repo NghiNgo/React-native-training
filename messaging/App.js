@@ -6,6 +6,9 @@ import MessageList from './components/MessageList'
 import { createImageMessage, createLocationMessage, createTextMessage } from './utils/MessageUtils'
 import Toolbar from './components/Toolbar'
 import ImageGrid from './components/ImageGrid';
+import KeyboardState from './components/KeyboardState';
+import MeasureLayout from './components/MeasureLayout';
+import MessagingContainer, { INPUT_METHOD } from './components/MessagingContainer';
 
 export default class App extends React.Component {
   state = {
@@ -20,22 +23,47 @@ export default class App extends React.Component {
     ],
     fullscreenImageId: null,
     isInputFocused: false,
+    inputMethod: INPUT_METHOD.NONE,
+  };
+
+  UNSAFE_componentWillMount() {
+    this.subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      const { fullscreenImageId } = this.state;
+
+      if (fullscreenImageId) {
+        this.dismissFullscreenImage();
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  componentWillUnmount() {
+    this.subscription.remove();
+  }
+
+  dismissFullscreenImage = () => {
+    this.setState({ fullscreenImageId: null});
   };
 
   handlePressToolbarCamera = () => {
-
+    this.setState({
+      isInputFocused: false,
+      inputMethod: INPUT_METHOD.CUSTOM,
+    });
   };
 
   handlePressToolbarLocation = () => {
     const { messages } = this.state;
 
     navigator.geolocation.getCurrentPosition((position) => {
-      const { coords: { latitide, longitude } } = position;
+      const { coords: { latitude, longitude } } = position;
 
       this.setState({
         messages: [
           createLocationMessage({
-            latitide,
+            latitude,
             longitude,
           }),
           ...messages,
@@ -44,9 +72,14 @@ export default class App extends React.Component {
     });
   }
 
-  handleChangeFocus = (isFocused) => {
-    this.setState({ isInputFocused: isFocused });
-  }
+  // use to add a new image to the message list
+  handlePressImage = (uri) => {
+    const { messages } = this.state;
+
+    this.setState({
+      messages: [createImageMessage(uri), ...messages],
+    });
+  };
 
   handleSubmit = (text) => {
     const { messages } = this.state;
@@ -56,8 +89,12 @@ export default class App extends React.Component {
     });
   };
 
-  dismissFullscreenImage = () => {
-    this.setState({ fullscreenImageId: null});
+  handleChangeFocus = (isFocused) => {
+    this.setState({ isInputFocused: isFocused });
+  };
+
+  handleChangeInputMethod = inputMethod => {
+    this.setState({ inputMethod });
   };
 
   handlePressMessage = ({ id, type }) => {
@@ -105,23 +142,6 @@ export default class App extends React.Component {
     );
   }
 
-  // use to add a new image to the message list
-  handlePressImage = (uri) => {
-    const { messages } = this.state;
-
-    this.setState({
-      messages: [createImageMessage(uri), ...messages],
-    });
-  };
-
-  renderInputMethodEditor() {
-    return (
-      <View style={styles.inputMethodEditor}>
-        <ImageGrid onPressImage={this.handlePressImage} />
-      </View>
-    );
-  }
-
   renderToolbar() {
     const { isInputFocused } = this.state;
 
@@ -137,6 +157,13 @@ export default class App extends React.Component {
       </View>
     );
   }
+
+  renderInputMethodEditor = () => (
+    <View style={styles.inputMethodEditor}>
+      <ImageGrid onPressImage={this.handlePressImage} />
+    </View>
+  )
+
 
   renderFullscreenImage = () => {
     const { messages, fullscreenImageId } = this.state;
@@ -156,30 +183,29 @@ export default class App extends React.Component {
     );
   }
 
-  // componentWillMount() {
-  //   this.subscription = BackHandler.addEventListener('hardwareBackPress', () => {
-  //     const { fullscreenImageId } = this.state;
-
-  //     if (fullscreenImageId) {
-  //       this.dismissFullscreenImage();
-  //       return true;
-  //     }
-
-  //     return false;
-  //   });
-  // }
-
-  // componentWillUnmount() {
-  //   this.subscription.remove();
-  // }
-
   render() {
+    const { inputMethod } = this.state;
+
     return (
       <View style={styles.container}>
         <Status />
-        {this.renderMessageList()}
-        {this.renderToolbar()}
-        {this.renderInputMethodEditor()}
+        <MeasureLayout>
+          {layout => (
+            <KeyboardState layout={layout}>
+              {keyboardInfo => (
+                <MessagingContainer
+                  {...keyboardInfo}
+                  inputMethod={inputMethod}
+                  onChangeInputMethod={this.handleChangeInputMethod}
+                  renderInputMethodEditor={this.renderInputMethodEditor}
+                >
+                  {this.renderMessageList()}
+                  {this.renderToolbar()}
+                </MessagingContainer>
+              )}
+            </KeyboardState>
+          )}
+        </MeasureLayout>
         {this.renderFullscreenImage()}
       </View>
     );

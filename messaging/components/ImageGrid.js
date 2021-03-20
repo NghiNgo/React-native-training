@@ -28,23 +28,6 @@ export default class ImageGrid extends React.Component {
     this.getImages();
   }
 
-  render() {
-    const { images } = this.state;
-
-    return (
-      <Grid
-        data={images}
-        renderItem={this.renderItem}
-        keyExtractor={keyExtractor}
-        onEndReached={this.getNextImages}
-        /* to notify is that we need to load more images. This is trickier than it sounds: the onEndReached
-        function we pass may be called multiple times before we have finished loading a new set of images.
-        We need to be careful not to load the same set of images twice. Let's start by calling getNextImages
-        when we reach the end of the list. */
-      />
-    );
-  };
-
   renderItem = ({ item: { uri }, size, marginTop, marginLeft }) => {
     const { onPressImage } = this.props;
 
@@ -76,7 +59,7 @@ export default class ImageGrid extends React.Component {
   set if images again oncce we reach the end of the camera roll. If we preferred, we could instead record
   a boolean this.hasNextPage to help us track when we've reached the end. */
 
-  getImages = async(after) => {
+  getImages = async after => {
     if (this.loading) return;
 
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -113,6 +96,23 @@ export default class ImageGrid extends React.Component {
     If we didn't use the completion callback and instead set this.loading = false after calling
     this.setState, we would potentially access this.state.images before it had been updated, thus
     one set of the images we loaded would fail to be added to the list. */
+  };
+
+  render() {
+    const { images } = this.state;
+
+    return (
+      <Grid
+        data={images}
+        renderItem={this.renderItem}
+        keyExtractor={keyExtractor}
+        onEndReached={this.getNextImages}
+        /* to notify is that we need to load more images. This is trickier than it sounds: the onEndReached
+        function we pass may be called multiple times before we have finished loading a new set of images.
+        We need to be careful not to load the same set of images twice. Let's start by calling getNextImages
+        when we reach the end of the list. */
+      />
+    );
   };
 }
 

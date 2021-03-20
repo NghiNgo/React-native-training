@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BackHandler, LayoutAnimation, Platform, UIManager, View } from 'react-native';
 
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 export const INPUT_METHOD = {
   NONE: 'NONE',
   KEYBOARD: 'KEYBOARD',
@@ -112,6 +116,12 @@ export default class MessagingContainer extends React.Component {
     to the device. We still want to show our custom image picker when a
     hardware keyboard is connected, so let's set 'keyboardHeight' to '250'
     in this case. */
+
+    // The keyboard is hidden and not transitioning up
+    const keyboardIsHidden = inputMethod === INPUT_METHOD.NONE && !keyboardWillShow;
+
+    // The keyboard is visible and transition down
+    const keyboardIsHiding = inputMethod === INPUT_METHOD.KEYBOARD && keyboardWillHide;
 
     const inputStyle = {
       height: showCustomInput ? keyboardHeight || 250 : 0,
