@@ -1,29 +1,90 @@
 import React from 'react';
-// import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { StackNavigator, TabNavigator } from 'react-navigation';
+import { MaterialIcons} from '@expo/vector-icon';
 
+import Favorites from './screens/Favorites';
 import Contacts from './screens/Contacts';
 import Profile from './screens/Profile';
 import User from './screens/User';
 
-// const Stack = createStackNavigator();
-const Tab = createMaterialTopTabNavigator();
+import colors from './utils/colors';
 
-export default function TabNavigator() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Contacts"
-        component={Contacts}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-      />
-      <Tab.Screen
-        name="User"
-        component={User}
-      />
-    </Tab.Navigator>
-  );
-}
+const getTabBarIcon = icon => ({ tintColor }) => (
+  <MaterialIcons name={icon} size={26} style={{ color: tintColor }} />
+);
+
+const ContactsScreens = StackNavigator(
+  {
+    Contacts: {
+      screen: Contacts,
+    },
+    Profile: {
+      screen: Profile,
+    },
+  },
+  {
+    initialRouteName: 'Contacts',
+    navigationOptions: {
+      tabBarIcon: getTabBarIcon('list'),
+    },
+  },
+)
+
+const FavoritesScreens = StackNavigator(
+  {
+    Favorites: {
+      screen: Favorites,
+    },
+    Profile: {
+      screen: Profile,
+    },
+  },
+  {
+    initialRouteName: 'Favorites',
+    navigationOptions: {
+      tabBarIcon: getTabBarIcon('star'),
+    },
+  },
+);
+
+const UserScreens = StackNavigator(
+  {
+    User: {
+      screen: User,
+    },
+  },
+  {
+    initialRouteName: 'User',
+    navigationOptions: {
+      tabBarIcon: getTabBarIcon('person'),
+    },
+  },
+);
+
+export default TabNavigator(
+  {
+    Contacts: {
+      screen: ContactsScreens,
+    },
+    Favorites: {
+      screen: FavoritesScreens,
+    },
+    User: {
+      screen: UserScreens,
+    },
+  },
+  {
+    initialRouteName: 'Contacts',
+    tabBarPosition: 'bottom',
+    tabBarOptions: {
+      style: {
+        backgroundColor: colors.greyLight,
+      },
+      showLabel: false,
+      showIcon: true,
+      activeTintColor: colors.blue,
+      inactiveTintColor: colors.greyDark,
+      renderIndicator: () => null,
+    }
+  }
+)
