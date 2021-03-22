@@ -3,13 +3,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Contacts from './screens/Contacts';
 import Profile from './screens/Profile';
-import Favorites from './screens/Favorites';
+import User from './screens/User';
 
 const Stack = createStackNavigator();
 
 export default function StackNavigator() {
   return (
-    <Stack.Navigator initialRouteName='Favorites'>
+    <Stack.Navigator initialRouteName='User'>
       <Stack.Screen
         name="Contacts"
         component={Contacts}
@@ -19,8 +19,8 @@ export default function StackNavigator() {
         component={Profile}
       />
       <Stack.Screen
-        name="Favorites"
-        component={Favorites}
+        name="User"
+        component={User}
       />
     </Stack.Navigator>
   );
