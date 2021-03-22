@@ -1,7 +1,13 @@
 import React from 'react';
 
-import Contacts from './screens/Contacts';
+import {NavigationContainer} from '@react-navigation/native';
+
+import AppNavigator from './routes';
 
 export default function App() {
-  return <Contacts />;
+  return (
+    <NavigationContainer independent={true}>
+      <AppNavigator />
+    </NavigationContainer>
+  )
 }
