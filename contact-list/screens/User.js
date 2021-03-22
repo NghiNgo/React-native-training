@@ -8,7 +8,7 @@ import colors from '../utils/colors';
 import { fetchUserContact } from '../utils/api';
 
 export default class User extends React.Component {
-  static options = {
+  static navigationOptions = {
     title: 'Me',
     headerTintColor: 'white',
     headerStyle: {
