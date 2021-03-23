@@ -1,9 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
-
-import { fetchContacts } from '../utils/api';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 
 import ContactThumbnail from '../components/ContactThumbnail';
+
+import { fetchContacts } from '../utils/api';
+import store from '../store';
 
 const keyExtractor = ({ phone }) => phone;
 
@@ -13,26 +20,30 @@ export default class Favorites extends React.Component {
   };
 
   state = {
-    contacts: [],
-    loading: true,
-    error: false,
+    contacts: store.getState().contacts,
+    loading: store.getState().isFetchingContacts,
+    error: store.getState().error,
   };
 
   async componentDidMount() {
-    try {
-      const contacts = await fetchContacts();
+    const { contacts } = this.state;
 
+    this.unsubscribe = store.onChange(() =>
       this.setState({
-        contacts,
-        loading: false,
-        error: false,
-      });
-    } catch (e) {
-      this.setState({
-        loading: false,
-        error: true,
-      });
+        contacts: store.getState().contacts,
+        loading: store.getState().isFetchingContacts,
+        error: store.getState().error,
+      }));
+
+    if (contacts.length === 0) {
+      const fetchedContacts = await fetchContacts();
+
+      store.setState({ contacts: fetchedContacts, isFetchingContacts: false });
     }
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   renderFavoriteThumbnail = ({ item }) => {
@@ -42,21 +53,19 @@ export default class Favorites extends React.Component {
     return (
       <ContactThumbnail
         avatar={avatar}
-        onPress={() => navigate('Profile', { contact: item })}
+        onPress={() => navigate('Profile', { id: item.id })}
       />
     );
-  }
+  };
 
   render() {
-    const { loading, contacts, error } = this.state;
+    const { contacts, loading, error } = this.state;
     const favorites = contacts.filter(contact => contact.favorite);
 
     return (
       <View style={styles.container}>
         {loading && <ActivityIndicator size="large" />}
         {error && <Text>Error...</Text>}
-        {/* We show a loading indicator while the request is still being made, an error message
-        if the request fails, or the list of contacts. */}
 
         {!loading &&
           !error && (

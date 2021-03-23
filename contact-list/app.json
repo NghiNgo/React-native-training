@@ -1,12 +1,10 @@
 {
-  "name": "contact-list",
-  "displayName": "contact-list",
   "expo": {
-    "name": "contact-list",
+    "name": "Contact List",
     "slug": "contact-list",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "scheme": "contactlist",
+    "sdkVersion": "27.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png"
   }
 }

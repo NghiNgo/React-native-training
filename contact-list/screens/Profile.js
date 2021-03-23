@@ -1,17 +1,19 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { color } from 'react-native-reanimated';
 
 import ContactThumbnail from '../components/ContactThumbnail';
 import DetailListItem from '../components/DetailListItem';
 
-import { fetchRandomContact } from '../utils/api';
-
 import colors from '../utils/colors';
+import store from '../store';
 
 export default class Profile extends React.Component {
   static navigationOptions = ({ navigation: { state: { params } } }) => {
-    const { contact: { name } } = params;
+    const { id } = params;
+    const { name } = store
+      .getState()
+      .contacts.find(contact => contact.id === id);
+
     return {
       title: name.split(' ')[0],
       headerTintColor: 'white',
@@ -21,22 +23,14 @@ export default class Profile extends React.Component {
     };
   };
 
-  state = {
-    contact: {},
-  };
-
-  async componentDidMount() {
-    const contact = await fetchRandomContact();
-
-    this.setState({
-      contact,
-    });
-  }
+  state = store.getState();
 
   render() {
+    const { navigation: { state: { params } } } = this.props;
+    const { id } = params;
     const {
       avatar, name, email, phone, cell,
-    } = this.state.contact;
+    } = this.state.contacts.find(contact => contact.id === id);
 
     return (
       <View style={styles.container}>
@@ -49,7 +43,7 @@ export default class Profile extends React.Component {
           <DetailListItem icon="smartphone" title="Personal" subtitle={cell} />
         </View>
       </View>
-    )
+    );
   }
 }
 
