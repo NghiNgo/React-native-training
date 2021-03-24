@@ -47,6 +47,24 @@ export default class Start extends React.Component {
   };
   /* This transitionState value indicates the current state of our state machine. */
 
+  /* We'll also add a little delay using await and our ultility function sleep so we see the logo in the initial
+  state for a short period of time before starting the animation. */
+  async componentDidMount() {
+    await sleep(500);
+
+    const animation = LayoutAnimation.create(
+      750,
+      LayoutAnimation.Types.easeInEaseOut,
+      LayoutAnimation.Properties.opacity,
+    );
+
+    LayoutAnimation.configureNext(animation);
+
+    this.setState({ transitionState: State.WillTransitionIn })
+  }
+  /* The logo should move up toward the top of the screen, and the "Choose Size" text and placeholder
+  buttons will fade in. */
+
   render() {
     const { size, onChangeSize } = this.props;
     const { transitionState } = this.state;
@@ -56,12 +74,20 @@ export default class Start extends React.Component {
         <View style={styles.logo}>
           <Logo />
         </View>
-        <View>
-          <Toggle options={BOARD_SIZES} value={size} onChange={onChangeSize} />
-        </View>
-        <View>
-          <Button title={'Start Game'} onPress={() => {}} />
-        </View>
+        {transitionState !== State.Launching && (
+          <View>
+            <Toggle
+              options={BOARD_SIZES}
+              value={size}
+              onChange={onChangeSize}
+            />
+          </View>
+        )}
+        {transitionState !== State.Launching && (
+          <View>
+            <Button title={'Start Game'} onPress={() => {}} />
+          </View>
+        )}
       </View>
     );
   }
