@@ -27,8 +27,12 @@ export default class Game extends React.Component {
   static propTypes = {
     puzzle: PuzzlePropType.isRequired,
     image: Image.propTypes.source,
+    /* The puzzle and image props are used to display the puzzle board. When we want to change the
+    puzzle, we'll pass an updated puzzle object to App using the onChange prop. */
     onChange: PropTypes.func.isRequired,
     onQuit: PropTypes.func.isRequired,
+    /* We'll also present a button to allow quitting the game. When the user presses this button, we'll
+    call onQuit, initiating a transition back to the Start sreen. */
   };
 
   static defaultProps = {

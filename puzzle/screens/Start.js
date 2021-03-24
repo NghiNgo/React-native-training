@@ -48,7 +48,22 @@ export default class Start extends React.Component {
   /* This transitionState value indicates the current state of our state machine. */
 
   render() {
-    return null;
+    const { size, onChangeSize } = this.props;
+    const { transitionState } = this.state;
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.logo}>
+          <Logo />
+        </View>
+        <View>
+          <Toggle options={BOARD_SIZES} value={size} onChange={onChangeSize} />
+        </View>
+        <View>
+          <Button title={'Start Game'} onPress={() => {}} />
+        </View>
+      </View>
+    );
   }
 }
 
