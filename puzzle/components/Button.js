@@ -37,6 +37,28 @@ export default class Button extends React.Component {
     borderRadius: 100,
   };
 
+  constructor(props) {
+    super(props);
+
+    const { disabled } = props;
+
+    this.state = { pressed: false };
+    this.value = new Animated.Value(getValue(false, disabled));
+  }
+
+  updateValue(nextProps, nextState) {
+    if (
+      this.props.disabled !== nextProps.disabled ||
+      this.state.pressed !== nextState.pressed
+    ) {
+      Animated.timing(this.value, {
+        duration: 200,
+        toValue: getValue(nextState.pressed, nextProps.disabled),
+        easing: Easing.out(Easing.quad),
+      }).start();
+    }
+  }
+
   render() {
     const { title, height } = this.props;
 
