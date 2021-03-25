@@ -65,6 +65,14 @@ export default class Start extends React.Component {
   /* The logo should move up toward the top of the screen, and the "Choose Size" text and placeholder
   buttons will fade in. */
 
+  async componentDidMount() {
+    await sleep(500);
+
+    await configureTransition(() => {
+      this.setState({ transitionState: State.WillTransitionIn});
+    });
+  }
+
   render() {
     const { size, onChangeSize } = this.props;
     const { transitionState } = this.state;
