@@ -59,6 +59,22 @@ export default class Button extends React.Component {
     }
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    this.updateValue(nextProps, nextState);
+  }
+
+  componentWillReceiveProps(nextProps, nextState) {
+    this.updateValue(nextProps, nextState);
+  }
+
+  handlePressIn = () => {
+    this.setState({ pressed: true });
+  };
+
+  handlePressOut = () => {
+    this.setState({ pressed: false });
+  }
+
   render() {
     const { title, height } = this.props;
 
