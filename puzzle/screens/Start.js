@@ -47,23 +47,26 @@ export default class Start extends React.Component {
   };
   /* This transitionState value indicates the current state of our state machine. */
 
-  /* We'll also add a little delay using await and our ultility function sleep so we see the logo in the initial
-  state for a short period of time before starting the animation. */
-  async componentDidMount() {
-    await sleep(500);
+  toggleOpacity = new Animated.Value(0);
+  buttonOpacity = new Animated.Value(0);
 
-    const animation = LayoutAnimation.create(
-      750,
-      LayoutAnimation.Types.easeInEaseOut,
-      LayoutAnimation.Properties.opacity,
-    );
+  // /* We'll also add a little delay using await and our ultility function sleep so we see the logo in the initial
+  // state for a short period of time before starting the animation. */
+  // async componentDidMount() {
+  //   await sleep(500);
 
-    LayoutAnimation.configureNext(animation);
+  //   const animation = LayoutAnimation.create(
+  //     750,
+  //     LayoutAnimation.Types.easeInEaseOut,
+  //     LayoutAnimation.Properties.opacity,
+  //   );
 
-    this.setState({ transitionState: State.WillTransitionIn })
-  }
-  /* The logo should move up toward the top of the screen, and the "Choose Size" text and placeholder
-  buttons will fade in. */
+  //   LayoutAnimation.configureNext(animation);
+
+  //   this.setState({ transitionState: State.WillTransitionIn })
+  // }
+  // /* The logo should move up toward the top of the screen, and the "Choose Size" text and placeholder
+  // buttons will fade in. */
 
   async componentDidMount() {
     await sleep(500);
@@ -71,11 +74,28 @@ export default class Start extends React.Component {
     await configureTransition(() => {
       this.setState({ transitionState: State.WillTransitionIn});
     });
+
+    Animated.timing(this.toggleOpacity, {
+      toValue: 1,
+      duration: 500,
+      delay: 500,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.timing(this.buttonOpacity, {
+      toValue: 1,
+      duration: 500,
+      delay: 1000,
+      useNativeDriver: true,
+    }).start();
   }
 
   render() {
     const { size, onChangeSize } = this.props;
     const { transitionState } = this.state;
+
+    const toggleStyle = { opacity: this.toggleOpacity };
+    const buttonStyle = { opacity: this.buttonOpacity };
 
     return (
       <View style={styles.container}>
@@ -83,18 +103,18 @@ export default class Start extends React.Component {
           <Logo />
         </View>
         {transitionState !== State.Launching && (
-          <View>
+          <Animated.View style={toggleStyle}>
             <Toggle
               options={BOARD_SIZES}
               value={size}
               onChange={onChangeSize}
             />
-          </View>
+          </Animated.View>
         )}
         {transitionState !== State.Launching && (
-          <View>
-            <Button title={'Start Game'} onPress={() => {}} />
-          </View>
+          <Animated.View style={buttonStyle}>
+            <Button title={'Start Game'} />
+          </Animated.View>
         )}
       </View>
     );
