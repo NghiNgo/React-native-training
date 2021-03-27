@@ -7,6 +7,7 @@ import Logo from '../components/Logo';
 import Toggle from '../components/Toggle';
 import configureTransition from '../utils/configureTransition';
 import sleep from '../utils/sleep';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 // Each possible state is defined in an object called State near the top of the file
 const State = {
@@ -91,6 +92,10 @@ export default class Start extends React.Component {
   }
 
   render() {
+    const {
+      props: { title, onPress, color, height, borderRadius, fontSize },
+    } = this;
+
     const { size, onChangeSize } = this.props;
     const { transitionState } = this.state;
 
@@ -98,25 +103,17 @@ export default class Start extends React.Component {
     const buttonStyle = { opacity: this.buttonOpacity };
 
     return (
-      <View style={styles.container}>
-        <View style={styles.logo}>
-          <Logo />
-        </View>
-        {transitionState !== State.Launching && (
-          <Animated.View style={toggleStyle}>
-            <Toggle
-              options={BOARD_SIZES}
-              value={size}
-              onChange={onChangeSize}
-            />
-          </Animated.View>
-        )}
-        {transitionState !== State.Launching && (
-          <Animated.View style={buttonStyle}>
-            <Button title={'Start Game'} />
-          </Animated.View>
-        )}
-      </View>
+      <TouchableWithoutFeedback
+        onPress={onPress}
+        onPressIn={this.handlePressIn}
+        onPressOut={this.handlePressOut}
+      >
+        <Animated.View style={/** */}>
+          <Animated.Text style={/** */}>
+            {title}
+          </Animated.Text>
+        </Animated.View>
+      </TouchableWithoutFeedback>
     );
   }
 }

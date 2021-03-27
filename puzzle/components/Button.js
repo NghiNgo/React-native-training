@@ -78,11 +78,39 @@ export default class Button extends React.Component {
   render() {
     const { title, height } = this.props;
 
+    const animatedColor = this.value.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['black', color],
+    });
+
+    const animatedScale = this.value.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.8, 1];,
+    })
+
+    const containerStyle = {
+      borderColor: animatedColor,
+      borderRadius,
+      height,
+      transform: [{ scale: animatedScale }],
+    };
+
+    const titleStyle = {
+      color: animatedColor,
+      fontSize,
+    };
+
     return (
-      <TouchableWithoutFeedback>
-        <View style={[styles.container, { height }]}>
-          <Text>{title}</Text>
-        </View>
+      <TouchableWithoutFeedback
+        onPress={onPress}
+        onPressIn={this.handlePressIn}
+        onPressOut={this.handlePressOut}
+      >
+        <Animated.View style={[styles.container, containerStyle]}>
+          <Animated.Text style={[styles.title, titleStyle]}>
+            {title}
+          </Animated.Text>
+        </Animated.View>
       </TouchableWithoutFeedback>
     );
   }
