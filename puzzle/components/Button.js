@@ -85,7 +85,7 @@ export default class Button extends React.Component {
 
     const animatedScale = this.value.interpolate({
       inputRange: [0, 1],
-      outputRange: [0.8, 1];,
+      outputRange: [0.8, 1],
     })
 
     const containerStyle = {
