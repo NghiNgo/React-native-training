@@ -104,9 +104,48 @@ export default class Board extends React.PureComponent {
     };
 
     return (
-      <Animated.View key={square} style={itemStyle}>
-        <Image style={imageStyle} source={image} />
-      </Animated.View>
+      <Draggable
+        key={square}
+        enable={transitionState === State.DidTransitionIn}
+        onTouchStart={() => this.handleTouchStart(square)}
+        onTouchMove={offset => this.handleTouchMove(square, index, offset)}
+        onTouchEnd={offset => this.handleTouchEnd(square, index, offset)}
+      >
+        {({ handlers, dragging }) => {
+          const itemStyle = {
+            position: 'absolute',
+            width: itemSize,
+            height: itemSize,
+            overflow: 'hidden',
+            transform: [
+              { translateX: this.animatedValues[square].left },
+              { translateY: this.animatedValues[square].top },
+              { scale: this.animatedValues[square].scale },
+            ],
+            zIndex: dragging ? 1 : 0,
+          };
+
+          const imageStyle = {
+            position: 'absolute',
+            width: itemSize * size + (itemMargin * size - 1),
+            height: itemSize * size + (itemMargin * size - 1),
+            transform: [
+              {
+                translateX: -Math.floor(square % size) * (itemSize + itemMargin),
+              },
+              {
+                translateY: -Math.floor(square / size) * (itemSize + itemMargin),
+              },
+            ],
+          };
+
+          return (
+            <Animated.View {...handlers} style={itemStyle}>
+              <Image style={imageStyle} source={image} />
+            </Animated.View>
+          )
+        }}
+      </Draggable>
     );
   };
 
