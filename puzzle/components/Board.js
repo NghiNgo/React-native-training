@@ -149,6 +149,41 @@ export default class Board extends React.PureComponent {
     );
   };
 
+  handleTouchStart(square) {
+    Animated.spring(this.animatedValues[square].scale, {
+      toValue: 1.1,
+      friction: 20,
+      tension: 200,
+      useNativeDriver: true,
+    }).start();
+  }
+
+  handleTouchMove(square, index, { top, left }) {
+    const { puzzle, puzzle: { size } } = this.props;
+
+    const itemSize = calculateItemSize(size);
+    const move = availableMove(puzzle, square);
+
+    const { top: initialTop, left: initialLeft } = calculateItemPosition(size, index);
+
+    const distance = itemSize + itemMargin;
+
+    const clampedTop = clamp(
+      top,
+      move === 'up' ? -distance : 0,
+      move === 'down' ? distance : 0,
+    );
+
+    const clampedLeft = clamp(
+      left,
+      move === 'left' ? -distance : 0,
+      move === 'right' ? distance : 0,
+    );
+
+    this.animatedValues[square].left.setValue(initialLeft + clampedLeft);
+    this.animatedValues[square].top.setValue(initialTop + clampedTop);
+  }
+
   render() {
     const { puzzle: { board } } = this.props;
     const { transitionState } = this.state;
